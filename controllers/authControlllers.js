@@ -17,9 +17,8 @@ const register = async (req, res) => {
         zip_code,
         date_of_birth
     } = req.body;
-
+    
     try {
-
         const query = `
             INSERT INTO users (
                 username,
@@ -38,7 +37,7 @@ const register = async (req, res) => {
 
         const values = [
             username,
-            password,
+            password, // Plain-text password (not recommended)
             first_name,
             last_name,
             email,
@@ -51,22 +50,29 @@ const register = async (req, res) => {
         ];
 
         connection.query(query, values, (err, result) => {
-            if (err) return res.status(500).send(err);
+            if (err) {
+                console.error(err); // Log the error
+                return res.status(500).send({ message: 'Database error', error: err });
+            }
 
             const userId = result.insertId;
 
-            // Fetch the user details including isAdmin field
-            const fetchUserQuery = `SELECT username, is_admin FROM users WHERE user_id = '${userId}';`;
-            connection.query(fetchUserQuery, (err, userResult) => {
-                if (err) return res.status(500).send(err);
+            // Fetch the user details including is_admin field
+            const fetchUserQuery = `SELECT username, is_admin FROM users WHERE user_id = ?`;
+            connection.query(fetchUserQuery, [userId], (err, userResult) => {
+                if (err) {
+                    console.error(err); // Log the error
+                    return res.status(500).send({ message: 'Database error', error: err });
+                }
 
                 const user = userResult[0];
 
-                res.send({ message: "User registered successfully", id: userId });
+                res.send({ message: "User registered successfully", id: userId, user });
             });
         });
     } catch (err) {
-        res.status(500).send(err);
+        console.error(err); // Log the error
+        res.status(500).send({ message: 'Server error', error: err });
     }
 };
 
