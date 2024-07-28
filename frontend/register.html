@@ -7,24 +7,36 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f8f9fc;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
         }
+        .header {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            cursor: pointer;
+        }
         .container {
             background-color: #fff;
-            padding: 20px;
+            padding: 40px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
+            border-radius: 10px;
             max-width: 600px;
             width: 100%;
+            text-align: center;
         }
         .container h2 {
-            text-align: center;
+            font-size: 24px;
             margin-bottom: 20px;
+            color: #333;
         }
         .container form {
             display: grid;
@@ -34,31 +46,48 @@
         .container form .form-group {
             display: flex;
             flex-direction: column;
+            text-align: left;
         }
         .container form .form-group label {
             margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
         }
         .container form .form-group input {
             padding: 10px;
             border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 5px;
+            font-size: 14px;
         }
         .container form button {
             grid-column: 1 / -1;
             padding: 10px;
             border: none;
-            border-radius: 3px;
-            background-color: #5cb85c;
+            border-radius: 5px;
+            background-color: #007bff;
             color: #fff;
             font-size: 16px;
             cursor: pointer;
+            margin-bottom: 10px;
         }
         .container form button:hover {
-            background-color: #4cae4c;
+            background-color: #0056b3;
+        }
+        .container .login {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+        .container .login a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .container .login a:hover {
+            text-decoration: underline;
         }
         @media (max-width: 600px) {
             .container {
-                padding: 10px;
+                padding: 20px;
             }
             .container form {
                 gap: 10px;
@@ -67,8 +96,10 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Register</h2>
+    <div class="header" onclick="window.location.href='home.html'">Hospital Management</div>
+
+    <div class="container" style="margin-top: 70px;">
+        <h2>Create an Account</h2>
         <form id="registerForm">
             <div class="form-group">
                 <label for="username">Username</label>
@@ -116,6 +147,9 @@
             </div>
             <button type="submit">Register</button>
         </form>
+        <div class="login">
+            Already have an account? <a href="login.html">Login</a>
+        </div>
     </div>
 
     <script>

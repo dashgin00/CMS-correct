@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar a {
+            text-decoration: none;
+            color: #333;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .sidebar a:hover {
+            background-color: #f1f1f1;
+        }
+        .sidebar .logout {
+            background-color: #f8d7da;
+            color: #721c24;
+            cursor: pointer;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .content .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .content .header h2 {
+            margin: 0;
+        }
+        .content .header input {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .content .header button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .content .header button:hover {
+            background-color: #0056b3;
+        }
+        .status-container {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        .status-card {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 18%;
+            text-align: center;
+        }
+        .status-card h3 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .status-card p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .table-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .table-section {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 100%;
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        table th, table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        table th {
+            background-color: #f1f1f1;
+        }
+        .table-section button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .table-section button:hover {
+            background-color: #0056b3;
+        }
+        .welcome-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: #e9f7f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .welcome-container img {
+            width: 200px; /* Increased the width of the image */
+            margin-right: 20px;
+            border-radius: 10px;
+        }
+        .welcome-container div {
+            flex-grow: 1;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            padding: 10px;
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .search-bar button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <h2 id="username">Test Patient</h2>
+            <a href="javascript:void(0)" onclick="showSection('home')">Home</a>
+            <a href="javascript:void(0)" onclick="showSection('all-doctors')">All Doctors</a>
+            <a href="javascript:void(0)" onclick="showSection('scheduled-sessions')">Scheduled Sessions</a>
+            <a href="javascript:void(0)" onclick="showSection('my-bookings')">My Bookings</a>
+            <a href="javascript:void(0)" onclick="showSection('settings')">Settings</a>
+        </div>
+        <a href="javascript:void(0)" class="logout" onclick="logout()">Log out</a>
+    </div>
+    <div class="content">
+        <div class="header">
+            <h2>Home</h2>
+            <div id="current-date">Today's Date: </div>
+        </div>
+        <div id="home" class="welcome-container">
+            <img src="https://storage.googleapis.com/kaggle-datasets-images/4212873/7267804/803942ea487c66f15a1993c359173866/dataset-cover.png?t=2023-12-23-16-46-49" alt="Welcome">
+            <div>
+                <h3>Welcome!</h3>
+                <p>Haven't any idea about doctors? no problem let's jump to "All Doctors" section or "Sessions"</p>
+                <p>Track your past and future appointments history.</p>
+                <p>Also find out the expected arrival time of your doctor or medical consultant.</p>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search Doctor and We will Find The Session Available">
+                    <button>Search</button>
+                </div>
+            </div>
+        </div>
+        <div id="all-doctors" class="table-section">
+            <h3>All Doctors</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Doctor Name</th>
+                        <th>Email</th>
+                        <th>Specialties</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Doctor rows will be appended here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        <div id="scheduled-sessions" class="table-section">
+            <h3>Scheduled Sessions</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Session Title</th>
+                        <th>Doctor</th>
+                        <th>Scheduled Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Session rows will be appended here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        <div id="my-bookings" class="table-section">
+            <h3>My Bookings</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Appointment Number</th>
+                        <th>Session Title</th>
+                        <th>Doctor</th>
+                        <th>Scheduled Date & Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Booking rows will be appended here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        <div id="settings" class="table-section">
+            <h3>Settings</h3>
+            <p>Settings content goes here.</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to set current date
+        function setCurrentDate() {
+            const today = new Date();
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            const formattedDate = today.toLocaleDateString('en-CA', options);
+            document.getElementById('current-date').innerText = `Today's Date: ${formattedDate}`;
+        }
+
+        // Function to show the selected section and hide others
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.table-section, .welcome-container');
+            sections.forEach(section => {
+                if (section.id === sectionId) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        }
+
+        // Function to log out the user
+        function logout() {
+            localStorage.removeItem('username');
+            alert('You have successfully logged out.');
+            window.location.href = 'home.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            setCurrentDate();
+
+            // Show the home section by default
+            showSection('home');
+
+            // Set the username in the sidebar
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('username').innerText = username;
+            }
+
+            fetch('http://localhost:3001/admin/appointments')
+                .then(response => response.json())
+                .then(data => {
+                    const appointmentsTable = document.querySelector('#my-bookings tbody');
+                    data.forEach(appointment => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${appointment.appointment_number}</td>
+                            <td>${appointment.session_title}</td>
+                            <td>${appointment.doctor}</td>
+                            <td>${appointment.scheduled_date_time}</td>
+                        `;
+                        appointmentsTable.appendChild(row);
+                    });
+                });
+
+            fetch('http://localhost:3001/admin/sessions')
+                .then(response => response.json())
+                .then(data => {
+                    const sessionsTable = document.querySelector('#scheduled-sessions tbody');
+                    data.forEach(session => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${session.session_title}</td>
+                            <td>${session.doctor}</td>
+                            <td>${session.scheduled_date_time}</td>
+                        `;
+                        sessionsTable.appendChild(row);
+                    });
+                });
+
+            fetch('http://localhost:3001/admin/doctors')
+                .then(response => response.json())
+                .then(data => {
+                    const doctorsTable = document.querySelector('#all-doctors tbody');
+                    data.forEach(doctor => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${doctor.name}</td>
+                            <td>${doctor.email}</td>
+                            <td>${doctor.specialties}</td>
+                        `;
+                        doctorsTable.appendChild(row);
+                    });
+                });
+        });
+    </script>
+</body>
+</html>

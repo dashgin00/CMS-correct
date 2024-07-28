@@ -7,73 +7,101 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f8f9fc;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
         }
+        .header {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            cursor: pointer;
+        }
         .container {
             background-color: #fff;
-            padding: 20px;
+            padding: 40px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
+            border-radius: 10px;
             max-width: 400px;
             width: 100%;
+            text-align: center;
         }
         .container h2 {
-            text-align: center;
+            font-size: 24px;
             margin-bottom: 20px;
+            color: #333;
         }
         .container form .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            text-align: left;
         }
         .container form .form-group label {
             display: block;
             margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
         }
         .container form .form-group input {
-            width: calc(100% - 22px);
+            width: 100%;
             padding: 10px;
-            margin-bottom: 5px;
             border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 5px;
+            font-size: 14px;
         }
         .container form button {
             width: 100%;
             padding: 10px;
             border: none;
-            border-radius: 3px;
-            background-color: #5cb85c;
+            border-radius: 5px;
+            background-color: #007bff;
             color: #fff;
             font-size: 16px;
             cursor: pointer;
+            margin-bottom: 10px;
         }
         .container form button:hover {
-            background-color: #4cae4c;
+            background-color: #0056b3;
         }
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-            }
+        .container .signup {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+        .container .signup a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .container .signup a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
+    <div class="header" onclick="window.location.href='home.html'">Hospital Management</div>
     <div class="container">
-        <h2>Login</h2>
+        <h2>Welcome Back!</h2>
+        <p>Login with your details to continue</p>
         <form id="loginForm">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+                <label for="username">Email:</label>
+                <input type="email" id="username" name="username" required>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
             </div>
             <button type="submit">Login</button>
         </form>
+        <div class="signup">
+            Don't have an account? <a href="register.html">Sign Up</a>
+        </div>
     </div>
 
     <script>
@@ -99,6 +127,9 @@
             .then(data => {
                 if (data.message) {
                     alert(data.message);
+                } else if (data.user) {
+                    localStorage.setItem('username', data.user.name);
+                    window.location.href = 'profile.html';
                 }
             })
             .catch(error => {
