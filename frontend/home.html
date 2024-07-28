@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body{
+      background-image: url(https://tateeda.com/wp-content/uploads/2021/02/TITLE-6.jpg);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      height: 100%;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .full-height {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(26, 26, 26, 0.548);
+      background-attachment: fixed;
+      height: 100vh;
+    }
+
+    table{
+      width: 100%;
+      padding-top: 5px;
+    }
+
+    .heading-text{
+      color: rgb(34, 34, 248);
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 63px;
+      margin-top: 0%; /* Reduced margin-top */
+      text-align: center;
+      margin-bottom: 0;
+    }
+
+    .sub-text2{
+      color: rgba(20, 88, 246, 0.5);
+      font-size: 17px;
+      line-height: 27px;
+      font-weight: 400;
+      text-align: center;
+      margin-top: 5px; /* Adjusted margin-top */
+    }
+
+    .register-btn{
+      background-color: rgba(240, 248, 255, 0.589);
+      color: #345cc4;
+    }
+
+    .edoc-logo{
+      color: white;
+      font-weight: bolder;
+      font-size: 20px;
+      padding-left: 20px;
+      animation: transitionIn-Y-over 0.5s;
+    }
+
+    .edoc-logo-sub{
+      color: rgba(255, 255, 255, 0.733);
+      font-size: 12px;
+    }
+
+    .nav-item{
+      color: rgba(255, 255, 255, 0.671);
+      text-align: center;
+      font-size: 15px;
+      font-weight: 500;
+      animation: transitionIn-Y-over 0.5s;
+    }
+
+    .nav-item:hover{
+      color: #f0f0f0;
+    }
+
+    .footer-hashen{
+      position: absolute;
+      bottom: 0;
+      left: 45%;
+      font-size: 13px;
+      animation: transitionIn-Y-over 0.5s;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="bg-blue-600 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="#" class="edoc-logo">Hospital Management</a>
+      <ul class="flex space-x-6">
+        <li><a href="home.html" class="nav-item">Home</a></li>
+        <li><a href="/frontend/doctors.html" class="nav-item">Doctors</a></li>
+        <li><a href="login.html" class="nav-item">Login</a></li>
+        <li><a href="register.html" class="nav-item">Register</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="full-height">
+    <main class="container mx-auto">
+      <section class="bg-white p-8 rounded-lg shadow-lg text-center">
+        <h1 class="heading-text">Welcome to Our Hospital Management System</h1>
+        <p class="sub-text2">
+          Our Hospital Management System (HMS) is designed to streamline and enhance the efficiency of hospital operations. From managing patient records to scheduling appointments and handling billing, our HMS provides a comprehensive solution to meet the needs of modern healthcare facilities.
+        </p>
+        <br style="height: 10px;">
+        <a href="info.html" class="register-btn px-4 py-2 rounded">Learn More</a>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

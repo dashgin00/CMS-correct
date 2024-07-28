@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctors - Hospital Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+
+    .navbar {
+      background-color: #002A8F;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    .navbar a:hover {
+      color: #00B5F5;
+    }
+
+    .main-heading {
+      color: #002A8F;
+    }
+
+    .doctor-card {
+      font-family: Arial, sans-serif;
+      background: white;
+      color: #333;
+    }
+
+    .doctor-card h2 {
+      color: #002A8F;
+    }
+
+    .doctor-card p {
+      color: #555;
+    }
+
+    .doctor-card button {
+      background-color: #002A8F;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    .doctor-card button:hover {
+      background-color: #00B5F5;
+    }
+
+    .modal {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-content {
+      background-color: white;
+      color: #333;
+    }
+
+    .modal-content h2 {
+      color: #002A8F;
+    }
+
+    .modal-content button {
+      background-color: #002A8F;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    .modal-content button:hover {
+      background-color: #00B5F5;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      fetch('http://localhost:3001/users/doctors')
+        .then(response => response.json())
+        .then(data => {
+          const doctorsContainer = document.getElementById('doctors-container');
+          data.forEach(doctor => {
+            const card = document.createElement('div');
+            card.className = 'doctor-card p-6 rounded-lg shadow-lg';
+            card.innerHTML = `
+              <h2 class="text-2xl font-bold mb-2">${doctor.first_name} ${doctor.last_name}</h2>
+              <p><strong>Specialty:</strong> ${doctor.specialty}</p>
+              <p><strong>Phone:</strong> ${doctor.phone_number}</p>
+              <p><strong>Email:</strong> ${doctor.email}</p>
+              <p><strong>Address:</strong> ${doctor.address}, ${doctor.city}</p>
+              <p><strong>Hired Date:</strong> ${new Date(doctor.date_hired).toLocaleDateString()}</p>
+              <button class="mt-4 px-4 py-2 rounded" onclick="openModal('${doctor.doctor_id}')">Appointment</button>
+            `;
+            doctorsContainer.appendChild(card);
+          });
+        });
+    });
+
+    function openModal(doctorId) {
+      const modal = document.getElementById('appointment-modal');
+      modal.classList.remove('hidden');
+      document.getElementById('modal-doctor-id').value = doctorId;
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('appointment-modal');
+      modal.classList.add('hidden');
+    }
+  </script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <!-- Navbar -->
+  <nav class="navbar p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="home.html" class="text-2xl font-bold">Hospital Management</a>
+      <ul class="flex space-x-6">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="doctors.html">Doctors</a></li>
+        <li><a href="#">Login</a></li>
+        <li><a href="#">Register</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="container mx-auto mt-10">
+    <section>
+      <h1 class="main-heading text-4xl font-bold mb-6">Our Doctors</h1>
+      <div id="doctors-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Doctor cards will be inserted here by JavaScript -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Appointment Modal -->
+  <div id="appointment-modal" class="modal fixed inset-0 flex items-center justify-center hidden">
+    <div class="modal-content p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-bold mb-4">Schedule Appointment</h2>
+      <form>
+        <input type="hidden" id="modal-doctor-id">
+        <div class="mb-4">
+          <label for="appointment-date" class="block">Appointment Date</label>
+          <input type="date" id="appointment-date" class="w-full p-2 border rounded">
+        </div>
+        <button type="submit" class="px-4 py-2 rounded">Submit</button>
+        <button type="button" onclick="closeModal()" class="ml-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Cancel</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

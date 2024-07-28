@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Management System - Info</title>
+  <style>
+    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css');
+
+    body {
+      background-image: url(https://www.startlazaa.com/wp-content/uploads/blog-main-1-1-1200x600.png);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    .container {
+      background: rgba(26, 26, 26, 0.548);
+      min-height: 100vh;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .heading {
+      font-size: 36px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .content {
+      font-size: 18px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .home-link {
+      background-color: rgba(240, 248, 255, 0.589);
+      color: #345cc4;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .home-link:hover {
+      background-color: rgba(240, 248, 255, 0.8);
+    }
+
+    .chart {
+      background-color: white;
+      border-radius: 5px;
+      padding: 10px;
+      margin-top: 20px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .chart-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: #345cc4;
+      margin-bottom: 10px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      background: #f3f4f6;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .footer a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      display: inline-block;
+      margin: 0 10px;
+    }
+
+    .footer a:hover {
+      color: #00B5F5;
+    }
+
+    .social-container {
+      width: 400px;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .social-icons {
+      padding: 0;
+      list-style: none;
+      margin: 1em 0;
+    }
+
+    .social-icons li {
+      display: inline-block;
+      margin: 0.15em;
+      position: relative;
+      font-size: 1.2em;
+    }
+
+    .social-icons i {
+      color: white;
+      position: absolute;
+      top: 21px;
+      left: 32px;
+      transition: all 265ms ease-out;
+    }
+
+    .social-icons a {
+      display: inline-block;
+    }
+
+    .social-icons a:before {
+      content: " ";
+      width: 60px;
+      height: 60px;
+      border-radius: 100%;
+      display: block;
+      background: linear-gradient(45deg, #00B5F5, #002A8F);
+      transition: all 265ms ease-out;
+    }
+
+    .social-icons a:hover:before {
+      transform: scale(0);
+      transition: all 265ms ease-in;
+    }
+
+    .social-icons a:hover i {
+      transform: scale(2.2);
+      color: #00B5F5;
+      background: -webkit-linear-gradient(45deg, #00B5F5, #002A8F);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: all 265ms ease-in;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <a href="home.html" class="home-link">Back to Home</a>
+    <div class="heading">Hospital Management System Information</div>
+    <div class="content">
+      Our Hospital Management System (HMS) was established in 2010 to revolutionize healthcare management. It was created in response to the growing need for efficient hospital operations in urban areas. The system was developed in New York City by a team of healthcare professionals and IT experts.
+      <br><br>
+      The HMS manages all aspects of hospital operations, from patient records and appointment scheduling to billing and inventory management. Currently, our hospital employs 150 doctors and serves 2000 patients.
+      <br><br>
+      Gender Distribution:
+      <ul>
+        <li>Doctors: 60% male, 40% female</li>
+        <li>Patients: 55% male, 45% female</li>
+      </ul>
+    </div>
+    <div class="chart">
+      <div class="chart-title">Gender Distribution of Doctors</div>
+      <canvas id="doctorsChart" width="300" height="300"></canvas>
+    </div>
+    <div class="chart">
+      <div class="chart-title">Gender Distribution of Patients</div>
+      <canvas id="patientsChart" width="300" height="300"></canvas>
+    </div>
+  </div>
+  <div class="footer">
+    <div style="color: #002A8F;">Contact Us: 123-456-7890 | info@hospital.com</div>
+    <div class="social-container">
+      <ul class="social-icons">
+        <li><a href="https://www.instagram.com"><i class="fa fa-instagram"></i></a></li>
+        <li><a href="https://www.twitter.com"><i class="fa fa-twitter"></i></a></li>
+        <li><a href="https://www.linkedin.com"><i class="fa fa-linkedin"></i></a></li>
+        <li><a href="https://www.codepen.io"><i class="fa fa-codepen"></i></a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <script>
+    const doctorsData = {
+      labels: ['Male', 'Female'],
+      datasets: [{
+        data: [60, 40],
+        backgroundColor: ['#345cc4', 'rgba(240, 248, 255, 0.589)'],
+        hoverBackgroundColor: ['#2a4b93', 'rgba(240, 248, 255, 0.8)']
+      }]
+    };
+
+    const patientsData = {
+      labels: ['Male', 'Female'],
+      datasets: [{
+        data: [55, 45],
+        backgroundColor: ['#345cc4', 'rgba(240, 248, 255, 0.589)'],
+        hoverBackgroundColor: ['#2a4b93', 'rgba(240, 248, 255, 0.8)']
+      }]
+    };
+
+    const configDoctors = {
+      type: 'pie',
+      data: doctorsData,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+        }
+      }
+    };
+
+    const configPatients = {
+      type: 'pie',
+      data: patientsData,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+        }
+      }
+    };
+
+    window.onload = function() {
+      const ctxDoctors = document.getElementById('doctorsChart').getContext('2d');
+      const ctxPatients = document.getElementById('patientsChart').getContext('2d');
+      new Chart(ctxDoctors, configDoctors);
+      new Chart(ctxPatients, configPatients);
+    };
+  </script>
+</body>
+</html>
