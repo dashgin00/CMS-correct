@@ -114,13 +114,15 @@
     <div class="sidebar">
         <div>
             <h2>Administrator</h2>
+            <a href="home.html">Home</a>
             <a href="home.html">Dashboard</a>
             <a href="doctors.html" class="active">Doctors</a>
             <a href="#">Schedule</a>
             <a href="#">Appointment</a>
             <a href="#">Patients</a>
+            <a href="#" class="logout" onclick="logout()">Log out</a>
         </div>
-        <a href="#" class="logout">Log out</a>
+        
     </div>
     <div class="content">
         <div class="header">
@@ -191,6 +193,27 @@
                 }
             })
            .then(response => response.json())
+        }
+        function logout() {
+            fetch("http://localhost:3001/auth/logout", {
+                method: "GET",
+                credentials: "include"  // Include credentials if cookies or authentication are required
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();  // Assuming the response is JSON
+            })
+            .then(data => {
+                console.log("Logout successful:", data);
+                window.location.href = 'home.html';
+                // Handle successful logout, e.g., redirect to a login page
+            })
+            .catch(error => {
+                console.error("There was a problem with the fetch operation:", error);
+            });
+            
         }
     </script>
 </body>

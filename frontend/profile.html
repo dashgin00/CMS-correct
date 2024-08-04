@@ -41,6 +41,7 @@
         .content {
             flex-grow: 1;
             padding: 20px;
+            position: relative;
         }
         .content .header {
             display: flex;
@@ -165,6 +166,23 @@
         .search-bar button:hover {
             background-color: #0056b3;
         }
+        .hidden {
+            display: none;
+        }
+        /* Additional Visual Effects for Appointments */
+        .highlight {
+            background-color: #d1e7dd;
+            animation: highlight-animation 1s ease-out;
+        }
+
+        @keyframes highlight-animation {
+            from {
+                background-color: #d4edda;
+            }
+            to {
+                background-color: #d1e7dd;
+            }
+        }
     </style>
 </head>
 <body>
@@ -176,8 +194,8 @@
             <a href="javascript:void(0)" onclick="showSection('scheduled-sessions')">Scheduled Sessions</a>
             <a href="javascript:void(0)" onclick="showSection('my-bookings')">My Bookings</a>
             <a href="javascript:void(0)" onclick="showSection('settings')">Settings</a>
+            <a href="javascript:void(0)" class="logout" onclick="logout()">Log out</a>
         </div>
-        <a href="javascript:void(0)" class="logout" onclick="logout()">Log out</a>
     </div>
     <div class="content">
         <div class="header">
@@ -205,6 +223,7 @@
                         <th>Doctor Name</th>
                         <th>Email</th>
                         <th>Specialties</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -247,8 +266,23 @@
             <h3>Settings</h3>
             <p>Settings content goes here.</p>
         </div>
+        <!-- Appointment Modal -->
+        <div id="appointment-modal" class="modal fixed inset-0 flex items-center justify-center hidden">
+            <div class="modal-content p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold mb-4">Schedule Appointment</h2>
+                <form id="appointment-form">
+                    <input type="hidden" id="modal-doctor-id">
+                    <div class="mb-4">
+                        <label for="appointment-date" class="block">Appointment Date</label>
+                        <input type="date" id="appointment-date" class="w-full p-2 border rounded">
+                    </div>
+                    <button type="submit" class="px-4 py-2 rounded">Submit</button>
+                    <button type="button" onclick="closeModal()" class="ml-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Cancel</button>
+                </form>
+            </div>
+        </div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
     <script>
         // Function to set current date
         function setCurrentDate() {
@@ -268,13 +302,61 @@
                     section.style.display = 'none';
                 }
             });
+
+            // Show or hide the "Schedule Appointment" modal based on the section
+            const appointmentModal = document.getElementById('appointment-modal');
+            if (sectionId === 'all-doctors') {
+                appointmentModal.classList.remove('hidden');
+            } else {
+                appointmentModal.classList.add('hidden');
+            }
         }
 
         // Function to log out the user
         function logout() {
-            localStorage.removeItem('username');
-            alert('You have successfully logged out.');
-            window.location.href = 'home.html';
+            fetch("http://localhost:3001/auth/logout", {
+                method: "GET",
+                credentials: "include"  // Include credentials if cookies or authentication are required
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();  // Assuming the response is JSON
+            })
+            .then(data => {
+                console.log("Logout successful:", data);
+                window.location.href = 'home.html';
+                // Handle successful logout, e.g., redirect to a login page
+            })
+            .catch(error => {
+                console.error("There was a problem with the fetch operation:", error);
+            });
+        }
+
+        // Function to open the appointment modal
+        function openModal(doctorId) {
+            const modal = document.getElementById('appointment-modal');
+            modal.classList.remove('hidden');
+            document.getElementById('modal-doctor-id').value = doctorId;
+        }
+
+        // Function to close the appointment modal
+        function closeModal() {
+            const modal = document.getElementById('appointment-modal');
+            modal.classList.add('hidden');
+        }
+
+        // Function to get cookie value by name
+        function getCookie(name) {
+            let cookieArr = document.cookie.split(";");
+            for (let i = 0; i < cookieArr.length; i++) {
+                let cookiePair = cookieArr[i].split("=");
+                if (name == cookiePair[0].trim()) {
+                    return decodeURIComponent(cookiePair[1]);
+                }
+            }
+            return null;
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -320,21 +402,86 @@
                     });
                 });
 
-            fetch('http://localhost:3001/admin/doctors')
+            fetch('http://localhost:3001/users/doctors')
                 .then(response => response.json())
                 .then(data => {
                     const doctorsTable = document.querySelector('#all-doctors tbody');
                     data.forEach(doctor => {
                         const row = document.createElement('tr');
                         row.innerHTML = `
-                            <td>${doctor.name}</td>
+                            <td>${doctor.first_name} ${doctor.last_name}</td>
                             <td>${doctor.email}</td>
-                            <td>${doctor.specialties}</td>
+                            <td>${doctor.specialty}</td>
+                            <td><button onclick="openModal('${doctor.doctor_id}')">Make Appointment</button></td>
                         `;
                         doctorsTable.appendChild(row);
                     });
                 });
+
+            document.getElementById('appointment-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const doctorId = document.getElementById('modal-doctor-id').value;
+                const appointmentDate = document.getElementById('appointment-date').value;
+
+                fetch(`http://localhost:3001/users/appointment/${doctorId}/1`, { // Assuming userID is 1 for this example
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include', // Include credentials (cookies)
+                    body: JSON.stringify({ session_date: appointmentDate })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                        closeModal();
+
+                        // Highlight the new appointment in "Scheduled Sessions"
+                        const sessionsTable = document.querySelector('#scheduled-sessions tbody');
+                        const newRow = document.createElement('tr');
+                        newRow.classList.add('highlight');
+                        newRow.innerHTML = `
+                            <td>${data.session_title}</td>
+                            <td>${data.doctor}</td>
+                            <td>${data.scheduled_date_time}</td>
+                        `;
+                        sessionsTable.appendChild(newRow);
+
+                        // Highlight the new booking in "My Bookings"
+                        const bookingsTable = document.querySelector('#my-bookings tbody');
+                        const newBookingRow = document.createElement('tr');
+                        newBookingRow.classList.add('highlight');
+                        newBookingRow.innerHTML = `
+                            <td>${data.appointment_number}</td>
+                            <td>${data.session_title}</td>
+                            <td>${data.doctor}</td>
+                            <td>${data.scheduled_date_time}</td>
+                        `;
+                        bookingsTable.appendChild(newBookingRow);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
         });
+
+        // Example usage:
+        const token = getCookie("token");
+
+        if (token) {
+            try {
+                const decoded = jwt_decode(token);
+                document.getElementById("username").textContent = decoded.username || "Username not found in token";
+            } catch (error) {
+                console.error("Invalid token:", error);
+                document.getElementById("username").textContent = "Invalid token";
+            }
+        } else {
+            document.getElementById("username").textContent = "Token not found";
+        }
+
     </script>
 </body>
 </html>

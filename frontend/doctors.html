@@ -100,16 +100,66 @@
         });
     });
 
+    function getCookie(name) {
+      let cookieArr = document.cookie.split(";");
+      for (let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        if (name == cookiePair[0].trim()) {
+          return decodeURIComponent(cookiePair[1]);
+        }
+      }
+      return null;
+    }
+
+    function checkAuthentication() {
+      const token = getCookie("token");
+      if (!token) {
+        alert("You must be logged in to book an appointment.");
+        window.location.href = "login.html"; // Redirect to login page
+        return false;
+      }
+      return true;
+    }
+
     function openModal(doctorId) {
-      const modal = document.getElementById('appointment-modal');
-      modal.classList.remove('hidden');
-      document.getElementById('modal-doctor-id').value = doctorId;
+      if (checkAuthentication()) {
+        const modal = document.getElementById('appointment-modal');
+        modal.classList.remove('hidden');
+        document.getElementById('modal-doctor-id').value = doctorId;
+      }
     }
 
     function closeModal() {
       const modal = document.getElementById('appointment-modal');
       modal.classList.add('hidden');
     }
+
+    document.getElementById('appointment-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      if (!checkAuthentication()) return;
+
+      const doctorId = document.getElementById('modal-doctor-id').value;
+      const appointmentDate = document.getElementById('appointment-date').value;
+
+      fetch(`http://localhost:3001/users/appointment/${doctorId}/1`, { // Assuming userID is 1 for this example
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include', // Include credentials (cookies)
+        body: JSON.stringify({ session_date: appointmentDate })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message) {
+          alert(data.message);
+          closeModal();
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
   </script>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -120,8 +170,8 @@
       <ul class="flex space-x-6">
         <li><a href="home.html">Home</a></li>
         <li><a href="doctors.html">Doctors</a></li>
-        <li><a href="#">Login</a></li>
-        <li><a href="#">Register</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
       </ul>
     </div>
   </nav>
@@ -140,7 +190,7 @@
   <div id="appointment-modal" class="modal fixed inset-0 flex items-center justify-center hidden">
     <div class="modal-content p-6 rounded-lg shadow-lg">
       <h2 class="text-2xl font-bold mb-4">Schedule Appointment</h2>
-      <form>
+      <form id="appointment-form">
         <input type="hidden" id="modal-doctor-id">
         <div class="mb-4">
           <label for="appointment-date" class="block">Appointment Date</label>

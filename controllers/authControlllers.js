@@ -1,7 +1,6 @@
 const connection = require('../config/dbConnection')
 
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 
 const register = async (req, res) => {
     const {
@@ -97,7 +96,7 @@ const login = async (req, res) => {
         // Set token in cookies
         res.cookie('token', token);
 
-        res.send({ message: "Login successful", id: user.user_id });
+        res.send({ message: "Login successful", id: user.user_id, isAdmin: user.is_admin });
     });
 };
 
