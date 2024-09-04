@@ -1,7 +1,6 @@
 {
   "name": "cms",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js"
@@ -13,8 +12,10 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.19.2",
+    "https": "^1.0.0",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.10.3",
     "nodemon": "^3.1.4"
-  }
+  },
+  "description": ""
 }

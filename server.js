@@ -6,7 +6,7 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-    origin: 'http://localhost:5500', // Replace with your frontend URL
+    origin: 'http://192.168.73.131/', // Replace with your frontend URL
     credentials: true // Allow credentials (cookies)
 }));
 
@@ -19,10 +19,12 @@ const authRoutes = require("./routes/authRoutes")
 
 
 // Middlewares
-app.use("/admin", adminRoutes)
-app.use("/users/", usersRoutes)
-app.use("/auth", authRoutes)
+app.use("/api/admin", adminRoutes)
+app.use("/api/users/", usersRoutes)
+app.use("/api/auth", authRoutes)
+const port = 3001
 
-app.listen(3001, (req, res)=>{
-    console.log("server is running")
+
+app.listen(port, (req, res)=>{
+    console.log("server is running on ", port)
 })
